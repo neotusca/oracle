@@ -1,0 +1,13 @@
+NOW=`date '+%Y%m%d-%H%M'`
+echo $NOW
+
+TABLES='srchadm.TB_SRCH_MWRK_M'
+tTABLES='TB_SRCH_MWRK_M_CLOB'
+
+impdp  LGU_STAGE/stage@LGUNMSPM    LOGFILE=$NOW-$TABLES.log  \
+                                   NETWORK_LINK=EXP_PNOSS_0915      DIRECTORY=FROM_PNOSS  \
+                                   TABLES=$TABLES                   JOB_NAME=expimp_$NOW  \
+                                   REMAP_SCHEMA=srchadm:LGU_STAGE   REMAP_TABLE=$TABLES:$tTABLES  \
+                                   REMAP_TABLESPACE=TS_SRCH_D01:STA,TS_SRCH_X01:STA  \
+                                   EXCLUDE=INDEX,TRIGGER,GRANT,CONSTRAINT  \
+                                   PARALLEL=2    CLUSTER=n
